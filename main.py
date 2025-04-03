@@ -433,5 +433,6 @@ if __name__ == "__main__":
     print("Training CVAE:")
     train_mnist_cvae(cvae_model, train_loader, cvae_optimizer, device, epochs=5)
 
-    # Visualize CVAE generated samples for digit '3'
-    visualize_cvae_generation(cvae_model, digit_class=3, n_samples=5, device=device)
+#Visualize generated samples from the CVAE for all digit classes
+for digit in range(10):
+    visualize_cvae_generation(cvae_model, digit_class=digit, n_samples=5, device=device)
