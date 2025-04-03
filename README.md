@@ -1,6 +1,6 @@
 # Variational Autoencoder (VAE) & Conditional Variational Autoencoder (CVAE) in PyTorch
 
-A PyTorch implementation of Variational Autoencoders (VAE) and Conditional Variational Autoencoders (CVAE) for generating and reconstructing MNIST digits. This project explores generative modeling using deep learning, leveraging the reparameterization trick and probabilistic inference techniques.
+A PyTorch implementation of Variational Autoencoders (VAE) and Conditional Variational Autoencoders (CVAE) for generating and reconstructing MNIST digits. This project explores generative modeling using Deep Neural Networks, leveraging the reparameterization trick and probabilistic inference techniques.
 
 ## 📌 Features
 
