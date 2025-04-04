@@ -67,7 +67,6 @@ class VAE(nn.Module):
 
 def reconstruct(model, x):
     """
-    [Q2.1: VAE – reconstruct function]
 
     Reconstructs input x using the VAE.
 
@@ -90,9 +89,8 @@ def reconstruct(model, x):
 
 def elbo(x_recon, x, mu, logvar):
     """
-    [Q2.2b: VAE – ELBO loss]
 
-    Computes the Evidence Lower Bound (ELBO) loss
+    Computes the Negative Evidence Lower Bound (NELBO) loss
 
     Args:
       x_recon: reconstructed input.
@@ -105,14 +103,14 @@ def elbo(x_recon, x, mu, logvar):
     """
 
     # KL divergence term, analytically computable for Gaussian distributions
-    kl_div = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+    kl_div = 0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
 
-    # Estimating the second term in NELBO, only using one sample in the MC estimate, notice no need to include alot of extra terms this second term from the NELBO since they don't affect the gradient due to being constan or are constants that dont affect loss optimization
+    # Estimating the second term in NELBO, only using one sample in the MC estimate, notice no need to include alot of extra terms this second term from the NELBO since they don't affect the gradient due to being constant.
     recon_loss = F.mse_loss(x_recon, x.view(-1, 784), reduction='sum')
 
 
     # Total NELBO loss
-    total_loss = recon_loss + kl_div
+    total_loss = recon_loss - kl_div
 
     return total_loss
 
@@ -176,7 +174,6 @@ def train_mnist_vae(model, train_loader, optimizer, device, epochs=10):
 
 def reconstruct_cvae(model, x, y):
     """
-    [Q3c.1: CVAE – reconstruct function]
     
     Reconstructs input x conditioned on label y using the CVAE.
     
@@ -199,9 +196,8 @@ def reconstruct_cvae(model, x, y):
 
 def celbo(x_recon, x, mu, logvar):
     """
-    [Q3c.2: CVAE – CELBO loss]
     
-    Computes the Conditional ELBO (CELBO) loss
+    Computes the Negative Conditional ELBO (NCELBO) loss
     
     Args:
       x_recon: reconstructed input.
@@ -213,20 +209,19 @@ def celbo(x_recon, x, mu, logvar):
       Total loss (scalar).
     """
     # KL divergence term is the same as in VAE
-    kl_div = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+    kl_div = 0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
     
     # Reconstruction loss (based on conditional log-likelihood) removal of terms that do not affect the gradient and one sample in the MC estimate
     recon_loss = F.mse_loss(x_recon, x.view(-1, 784), reduction='sum')
     
     # Total CELBO loss (negative ELBO to minimize)
-    total_loss = recon_loss + kl_div
+    total_loss = recon_loss - kl_div
     
     return total_loss
 
 
 def train_mnist_cvae(model, train_loader, optimizer, device, epochs=10):
     """
-    [Q6c.3: CVAE – train_mnist_cvae function]
     
     Trains the CVAE on MNIST.
     
@@ -325,7 +320,6 @@ class CVAE(nn.Module):
 
 def visualize_cvae_generation(model, digit_class, n_samples, device):
     """
-    [Q6d: CVAE – Visualizing Generated Samples]
 
     Uses the trained CVAE to generate samples for a given MNIST digit.
 
